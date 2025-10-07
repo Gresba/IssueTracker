@@ -3,7 +3,7 @@
 import { Button, Callout, TextField } from '@radix-ui/themes'
 import { useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import SimpleMDE from 'react-simplemde-editor'
+import dynamic from 'next/dynamic';
 import axios from 'axios'
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,9 +14,16 @@ import "easymde/dist/easymde.min.css";
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
 
+// Dynamically import SimpleMDE with no SSR
+const SimpleMDE = dynamic(
+    () => import('react-simplemde-editor'),
+    { ssr: false }
+);
+
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 const NewIssuesPage = () => {
+
     const router = useRouter();
     const { register, control, handleSubmit, formState: { errors } } = useForm<IssueForm>({
         resolver: zodResolver(createIssueSchema)

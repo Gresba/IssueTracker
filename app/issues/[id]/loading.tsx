@@ -1,8 +1,20 @@
+import { Flex, Card, Box, Skeleton } from '@radix-ui/themes'
 import React from 'react'
 
 const LoadingIssueDetailsPage = () => {
   return (
-    <div>Loading...</div>
+    <Box className='max-w-xl'>
+        <Skeleton/>
+        <Flex className='space-x-3' my="2">
+            <Skeleton width="5rem"/> 
+            <Skeleton width="8rem"/>
+        </Flex>
+        <Card className='prose' mt="4">
+            <Skeleton/>
+            <Skeleton/>
+            <Skeleton/>
+        </Card>
+    </Box>
   )
 }
 
