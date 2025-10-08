@@ -47,7 +47,10 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
                     try
                     {
                         setFormSubmitted(true)
-                        await axios.post('/api/issues', data);
+                        if(issue)
+                            await axios.patch(`/api/issues/${issue.id}`, data)
+                        else
+                            await axios.post('/api/issues', data);
                         router.push('/issues');
                     } catch (error) {
                         setFormSubmitted(false)
@@ -67,7 +70,10 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
                             {...field} />)}
                 />
                 <ErrorMessage>{errors.description?.message}</ErrorMessage>
-                <Button disabled={formSubmmited}>{formSubmmited ? "Submitting" : "Submit"} New Issue {formSubmmited && <Spinner/>} </Button>
+                <Button disabled={formSubmmited}>
+                    {issue ? 'Update Issue' : `${formSubmmited ? "Submitting" : "Submit"} New Issue`}
+                    {formSubmmited && <Spinner/> }
+                </Button>
             </form>
         </div>
     )
