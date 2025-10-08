@@ -11,8 +11,8 @@ import { z } from 'zod';
 import ErrorMessage from '@/app/components/ErrorMessage';
 import Spinner from '@/app/components/Spinner';
 import { Issue } from '@/app/generated/prisma';
-import "easymde/dist/easymde.min.css";
 import SimpleMDE from 'react-simplemde-editor';
+import "easymde/dist/easymde.min.css";
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -47,6 +47,7 @@ const IssueForm = ({issue}: {issue?: Issue}) => {
                             await axios.post('/api/issues', data);
                         router.push('/issues');
                     } catch (error) {
+                        console.log(error)
                         setFormSubmitted(false)
                         setError('An unexpected error occurred.');
                     }
