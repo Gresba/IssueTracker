@@ -5,13 +5,26 @@ import { prisma } from '@/prisma/client'
 import Link from '../../components/Link'
 import IssueStatusBadge from '../../components/IssueStatusBadge'
 import IssueActions from './IssueActions'
+import { Status } from '@/app/generated/prisma'
 
-const IssuesPage = async () => {
-  const issues = await prisma.issue.findMany();
+interface Props {
+  searchParams: { status: Status }
+}
+
+const IssuesPage = async ({ searchParams } : Props) => {
+  const statuses = Object.values(Status);
+
+  const { status } = await searchParams;
+
+  const issues = await prisma.issue.findMany({
+    where: {
+      status: statuses.includes(status) ? status : undefined
+    }
+  });
 
   return (
     <div>
-      <IssueActions/>
+      <IssueActions />
       <Table.Root variant='surface'>
         <Table.Header>
           <Table.Row>
@@ -28,11 +41,11 @@ const IssuesPage = async () => {
                   <div className='font-bold md:font-normal'>{issue.title}</div>
                 </Link>
                 <div className='block md:hidden'>
-                  <IssueStatusBadge status={issue.status}/>
+                  <IssueStatusBadge status={issue.status} />
                 </div>
               </Table.Cell>
               <Table.Cell className='hidden md:table-cell'>
-                <IssueStatusBadge status={issue.status}/>
+                <IssueStatusBadge status={issue.status} />
               </Table.Cell>
               <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
             </Table.Row>
